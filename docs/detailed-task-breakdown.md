@@ -17,14 +17,14 @@
 ### 1.1 프로젝트 구조 설정
 
 #### Task 1.1.1: 모노레포 초기 설정
-- [ ] **Task**: 루트 디렉토리 생성 및 yarn workspaces 설정
-- [ ] **상세 작업**:
+- [X] **Task**: 루트 디렉토리 생성 및 yarn workspaces 설정
+- [X] **상세 작업**:
   - `smart-real-estate/` 루트 디렉토리 생성
   - `package.json` 파일에 yarn workspaces 설정
   - `apps/`, `packages/` 디렉토리 구조 생성
   - `.gitignore`, `README.md`, `.env.example` 파일 생성
-- [ ] **완료 기준**: 모노레포 구조가 설정되고 yarn workspaces가 정상 동작함
-- [ ] **테스트 코드 작성**:
+- [X] **완료 기준**: 모노레포 구조가 설정되고 yarn workspaces가 정상 동작함
+- [X] **테스트 코드 작성**:
   - yarn workspaces 정상 동작 검증 스크립트
   - 패키지 간 의존성 설치 테스트
   - 빌드 및 실행 통합 테스트
