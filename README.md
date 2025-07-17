@@ -24,20 +24,35 @@
 이 프로젝트는 Yarn Workspaces를 활용한 모노레포 구조로 구성되어 있습니다.
 
 ```
-smart-real-estate/
+dongsan/
 ├── apps/                          # 애플리케이션
 │   ├── web/                       # Next.js 웹 애플리케이션
 │   └── mobile/                    # React Native 모바일 앱
 ├── packages/                      # 공유 패키지
 │   ├── backend/                   # Node.js Express 백엔드
 │   ├── types/                     # TypeScript 타입 정의
-│   └── common-utils/              # 공통 유틸리티 함수
+│   ├── common-utils/              # 공통 유틸리티 함수
+│   └── common-ui/                 # 공통 UI 컴포넌트
+├── scripts/                       # 개발 및 배포 스크립트
+│   ├── verify-workspaces.js       # 워크스페이스 검증 스크립트
+│   └── integration-test.js        # 통합 테스트 스크립트
 ├── docs/                          # 프로젝트 문서
-├── package.json                   # 루트 패키지 설정
+├── package.json                   # 루트 패키지 설정 (Yarn Workspaces)
+├── env.example                    # 환경 변수 예시
 ├── .gitignore                     # Git 무시 파일 목록
-├── .env.example                   # 환경 변수 예시
 └── README.md                      # 프로젝트 설명서
 ```
+
+### 📦 워크스페이스 패키지
+
+| 패키지 | 설명 | 기술 스택 |
+|--------|------|-----------|
+| `@smart-real-estate/web` | Next.js 웹 프론트엔드 | Next.js, React, Tailwind CSS, Shadcn UI |
+| `@smart-real-estate/mobile` | React Native 모바일 앱 | React Native, Expo, React Native Paper |
+| `@smart-real-estate/backend` | Node.js Express 백엔드 | Express, Sequelize, Mongoose, JWT |
+| `@smart-real-estate/types` | 공통 TypeScript 타입 | TypeScript |
+| `@smart-real-estate/common-utils` | 공통 유틸리티 함수 | TypeScript, date-fns |
+| `@smart-real-estate/common-ui` | 공통 UI 컴포넌트 | React, TypeScript |
 
 ## 🛠️ 기술 스택
 
@@ -72,7 +87,7 @@ smart-real-estate/
 ### 필수 요구사항
 
 - Node.js >= 18.0.0
-- Yarn >= 1.22.0
+- Yarn >= 3.0.0 (Yarn Workspaces 지원)
 - Git
 
 ### 설치 및 실행
@@ -81,7 +96,7 @@ smart-real-estate/
 
    ```bash
    git clone <repository-url>
-   cd smart-real-estate
+   cd dongsan
    ```
 
 2. **의존성 설치**
@@ -93,33 +108,71 @@ smart-real-estate/
 3. **환경 변수 설정**
 
    ```bash
-   cp .env.example .env
+   cp env.example .env
    # .env 파일을 편집하여 필요한 환경 변수를 설정하세요
    ```
 
-4. **개발 서버 실행**
+4. **워크스페이스 검증** (선택사항)
+
+   ```bash
+   yarn verify-workspaces
+   ```
+
+5. **개발 서버 실행**
 
    ```bash
    # 모든 애플리케이션 동시 실행
    yarn dev
 
    # 개별 애플리케이션 실행
-   yarn start:web      # 웹 애플리케이션
-   yarn start:mobile   # 모바일 앱
-   yarn start:backend  # 백엔드 서버
+   yarn dev:web        # Next.js 웹 애플리케이션
+   yarn dev:mobile     # React Native 모바일 앱
+   yarn dev:backend    # Express 백엔드 서버
    ```
+
+### 📋 모노레포 검증 및 테스트
+
+프로젝트 설정이 올바른지 확인하려면 다음 스크립트를 실행하세요:
+
+```bash
+# 워크스페이스 설정 검증
+yarn verify-workspaces
+
+# 전체 통합 테스트 실행
+node scripts/integration-test.js
+```
 
 ## 📝 스크립트 명령어
 
-| 명령어                 | 설명                                 |
-| ---------------------- | ------------------------------------ |
-| `yarn dev`             | 모든 워크스페이스에서 개발 서버 실행 |
-| `yarn build`           | 모든 워크스페이스 빌드               |
-| `yarn test`            | 모든 워크스페이스 테스트 실행        |
-| `yarn lint`            | 코드 린팅 검사                       |
-| `yarn type-check`      | TypeScript 타입 검사                 |
-| `yarn clean`           | 빌드 파일 및 node_modules 정리       |
-| `yarn workspace:setup` | 초기 워크스페이스 설정               |
+### 🔄 개발 및 빌드 명령어
+
+| 명령어 | 설명 |
+|--------|------|
+| `yarn dev` | 웹 + 백엔드 개발 서버 동시 실행 |
+| `yarn dev:web` | Next.js 웹 애플리케이션 개발 서버 |
+| `yarn dev:mobile` | React Native 모바일 앱 실행 |
+| `yarn dev:backend` | Express 백엔드 개발 서버 |
+| `yarn build` | 모든 워크스페이스 빌드 |
+| `yarn build:web` | 웹 애플리케이션 프로덕션 빌드 |
+| `yarn build:backend` | 백엔드 서비스 빌드 |
+
+### 🧪 테스트 및 품질 관리
+
+| 명령어 | 설명 |
+|--------|------|
+| `yarn test` | 모든 워크스페이스 테스트 실행 |
+| `yarn test:coverage` | 테스트 커버리지 포함 실행 |
+| `yarn lint` | ESLint 코드 검사 |
+| `yarn lint:fix` | ESLint 자동 수정 |
+| `yarn format` | Prettier 코드 포맷팅 |
+| `yarn type-check` | TypeScript 타입 검사 |
+
+### 🔧 유틸리티 명령어
+
+| 명령어 | 설명 |
+|--------|------|
+| `yarn verify-workspaces` | 워크스페이스 설정 검증 |
+| `yarn clean` | 빌드 파일 및 캐시 정리 |
 
 ## 🧪 테스트
 
