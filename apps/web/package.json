@@ -41,9 +41,8 @@
     "date-fns": "^2.30.0",
     "react-hook-form": "^7.47.0",
     "@hookform/resolvers": "^3.3.0",
-    "zod": "^3.22.0",
-    "@smart-real-estate/types": "workspace:*",
-    "@smart-real-estate/common-utils": "workspace:*"
+    "zod": "^3.22.0"
+
   },
   "devDependencies": {
     "@types/node": "^20.0.0",

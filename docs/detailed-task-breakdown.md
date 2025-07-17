@@ -43,14 +43,14 @@
   - 패키지 간 import/export 테스트
 
 #### Task 1.1.3: 웹 프론트엔드 프로젝트 초기화
-- [ ] **Task**: Next.js 웹 애플리케이션 초기 설정
-- [ ] **상세 작업**:
+- [X] **Task**: Next.js 웹 애플리케이션 초기 설정
+- [X] **상세 작업**:
   - `apps/web/` Next.js 프로젝트 생성 (App Router 사용)
   - TypeScript, Tailwind CSS, ESLint, Prettier 설정
   - 폴더 구조 생성 (`src/app/`, `src/components/`, `src/lib/` 등)
   - 기본 레이아웃 및 공통 컴포넌트 구조 설정
-- [ ] **완료 기준**: Next.js 개발 서버가 정상 실행되고 기본 페이지가 표시됨
-- [ ] **테스트 코드 작성**:
+- [X] **완료 기준**: Next.js 개발 서버가 정상 실행되고 기본 페이지가 표시됨
+- [X] **테스트 코드 작성**:
   - Next.js 페이지 렌더링 테스트
   - 기본 컴포넌트 단위 테스트 (Jest + React Testing Library)
   - ESLint/Prettier 설정 검증 테스트
