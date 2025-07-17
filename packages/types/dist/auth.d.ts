@@ -1,44 +1,44 @@
+/**
+ * 인증 관련 타입 정의
+ */
 import { BaseEntity } from './common';
 /**
  * 소셜 로그인 제공자
  */
 export type SocialProvider = 'kakao' | 'naver' | 'google';
 /**
- * 사용자 정보
+ * 사용자 역할
  */
-export interface User extends BaseEntity {
-    socialId: string;
-    socialProvider: SocialProvider;
+export type UserRole = 'user' | 'admin';
+/**
+ * 사용자 프로필 정보
+ */
+export interface UserProfile extends BaseEntity {
+    email: string;
     nickname: string;
-    email?: string;
-    unitPreference: 'sqm' | 'pyeong';
+    profileImage?: string;
+    socialProvider: SocialProvider;
+    socialId: string;
+    role: UserRole;
+    isActive: boolean;
+    lastLoginAt?: Date;
 }
 /**
  * 로그인 요청
  */
 export interface LoginRequest {
     provider: SocialProvider;
-    code: string;
-    redirectUri: string;
+    authCode: string;
+    redirectUri?: string;
 }
 /**
  * 로그인 응답
  */
-export interface LoginResponse {
-    user: User;
+export interface AuthResponse {
+    user: UserProfile;
     accessToken: string;
     refreshToken: string;
     expiresIn: number;
-}
-/**
- * JWT 토큰 페이로드
- */
-export interface JwtPayload {
-    userId: string;
-    socialId: string;
-    socialProvider: SocialProvider;
-    iat: number;
-    exp: number;
 }
 /**
  * 토큰 갱신 요청
@@ -47,28 +47,36 @@ export interface RefreshTokenRequest {
     refreshToken: string;
 }
 /**
- * 토큰 갱신 응답
+ * JWT 토큰 페이로드
  */
-export interface RefreshTokenResponse {
-    accessToken: string;
-    expiresIn: number;
+export interface JwtPayload {
+    userId: string;
+    email: string;
+    role: UserRole;
+    iat: number;
+    exp: number;
 }
 /**
- * 인증 상태
+ * 소셜 로그인 사용자 정보
  */
-export interface AuthState {
-    isAuthenticated: boolean;
-    user: User | null;
-    accessToken: string | null;
-    refreshToken: string | null;
-    loading: boolean;
-    error: string | null;
+export interface SocialUserInfo {
+    socialId: string;
+    email: string;
+    nickname: string;
+    profileImage?: string;
+    provider: SocialProvider;
 }
 /**
- * 사용자 프로필 업데이트 요청
+ * 사용자 설정
  */
-export interface UpdateProfileRequest {
-    nickname?: string;
-    unitPreference?: 'sqm' | 'pyeong';
+export interface UserSettings {
+    theme: 'light' | 'dark' | 'system';
+    language: 'ko' | 'en';
+    timezone: string;
+    notifications: {
+        email: boolean;
+        push: boolean;
+        priceAlert: boolean;
+    };
 }
 //# sourceMappingURL=auth.d.ts.map

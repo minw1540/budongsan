@@ -1,37 +1,54 @@
+/**
+ * 사용자 시트 관련 타입 정의
+ */
 import { BaseEntity } from './common';
+import { TransactionType } from './property';
 /**
- * 사용자 정의 컬럼 타입
+ * 컬럼 데이터 타입
  */
-export type CustomColumnType = 'text' | 'number' | 'date' | 'boolean' | 'select';
+export type ColumnDataType = 'text' | 'number' | 'date' | 'boolean' | 'select' | 'multiselect';
 /**
- * 사용자 정의 컬럼 정의
+ * 사용자 정의 컬럼
  */
-export interface CustomColumn {
+export interface UserDefinedColumn {
     id: string;
     name: string;
-    type: CustomColumnType;
-    required: boolean;
+    dataType: ColumnDataType;
     options?: string[];
-    defaultValue?: any;
+    isRequired: boolean;
+    defaultValue?: unknown;
+    order: number;
 }
 /**
- * 시트 내 매물 항목
+ * 시트 매물 정보
  */
-export interface SheetProperty {
-    sheetPropertyId: string;
-    aptSeq: string;
-    aptNm: string;
+export interface SheetProperty extends BaseEntity {
+    userId: string;
+    sheetId: string;
+    propertyId?: string;
+    complexName: string;
+    dong?: string;
+    ho?: string;
     exclusiveUseArea: number;
-    addressDisplay: string;
-    latestDealAmount: number;
-    latestJeonseAmount?: number;
+    floor?: number;
+    transactionType: TransactionType;
+    price: number;
+    deposit?: number;
+    monthlyRent?: number;
+    transactionDate?: Date;
+    address: string;
     buildYear?: number;
-    totalHouseholds?: number;
-    myMemo?: string;
+    customData: Record<string, unknown>;
     tags: string[];
-    userDefinedColumns: Record<string, any>;
-    addedAt: Date;
-    updatedAt: Date;
+    memo?: string;
+    isBookmarked: boolean;
+    priority: 'low' | 'medium' | 'high';
+    status: 'interested' | 'visited' | 'negotiating' | 'completed' | 'canceled';
+    rating?: number;
+    pros?: string[];
+    cons?: string[];
+    pricePerArea?: number;
+    isRecentTransaction?: boolean;
 }
 /**
  * 사용자 시트
@@ -40,73 +57,43 @@ export interface UserSheet extends BaseEntity {
     userId: string;
     name: string;
     description?: string;
-    customColumns: CustomColumn[];
-    properties: SheetProperty[];
     isDefault: boolean;
-    sortOrder: number;
-}
-/**
- * 시트에 매물 추가 요청
- */
-export interface AddPropertyToSheetRequest {
-    sheetId: string;
-    aptSeq: string;
-    exclusiveUseArea: number;
-    memo?: string;
-    tags?: string[];
-    userDefinedData?: Record<string, any>;
-}
-/**
- * 시트 매물 업데이트 요청
- */
-export interface UpdateSheetPropertyRequest {
-    sheetPropertyId: string;
-    memo?: string;
-    tags?: string[];
-    userDefinedData?: Record<string, any>;
-}
-/**
- * 시트 생성 요청
- */
-export interface CreateSheetRequest {
-    name: string;
-    description?: string;
-    customColumns?: CustomColumn[];
-}
-/**
- * 시트 업데이트 요청
- */
-export interface UpdateSheetRequest {
-    name?: string;
-    description?: string;
-    customColumns?: CustomColumn[];
-}
-/**
- * 시트 정렬 옵션
- */
-export interface SheetSortOption {
-    field: keyof SheetProperty | string;
-    order: 'asc' | 'desc';
-}
-/**
- * 시트 필터 옵션
- */
-export interface SheetFilterOption {
-    tags?: string[];
-    priceRange?: {
-        min?: number;
-        max?: number;
+    isPublic: boolean;
+    settings: {
+        columns: UserDefinedColumn[];
+        filters: SheetFilter[];
+        sorting: SheetSort[];
+        view: 'table' | 'card' | 'map';
+        theme?: string;
     };
-    areaRange?: {
-        min?: number;
-        max?: number;
+    statistics: {
+        totalProperties: number;
+        averagePrice: number;
+        priceRange: {
+            min: number;
+            max: number;
+        };
+        transactionTypes: Record<TransactionType, number>;
+        lastUpdated: Date;
     };
-    buildYearRange?: {
-        min?: number;
-        max?: number;
-    };
-    keyword?: string;
-    customFilters?: Record<string, any>;
+}
+/**
+ * 시트 필터
+ */
+export interface SheetFilter {
+    id: string;
+    columnId: string;
+    operator: 'eq' | 'ne' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'like' | 'between';
+    value: unknown;
+    isActive: boolean;
+}
+/**
+ * 시트 정렬
+ */
+export interface SheetSort {
+    columnId: string;
+    direction: 'asc' | 'desc';
+    order: number;
 }
 /**
  * 시트 뷰 설정
@@ -114,65 +101,51 @@ export interface SheetFilterOption {
 export interface SheetViewSettings {
     visibleColumns: string[];
     columnWidths: Record<string, number>;
-    sort: SheetSortOption;
-    filter: SheetFilterOption;
+    pinnedColumns: string[];
+    rowHeight: 'compact' | 'normal' | 'large';
+    showThumbnails: boolean;
+    showMiniChart: boolean;
 }
 /**
- * 시트 통계 정보
+ * 시트 내보내기 옵션
  */
-export interface SheetStatistics {
-    totalProperties: number;
-    avgPrice: number;
-    avgArea: number;
-    avgBuildYear: number;
-    tagDistribution: Record<string, number>;
-    priceDistribution: {
-        ranges: string[];
-        counts: number[];
+export interface SheetExportOptions {
+    format: 'csv' | 'xlsx' | 'pdf';
+    includeHeaders: boolean;
+    includeFilters: boolean;
+    columns: string[];
+    filters?: SheetFilter[];
+}
+/**
+ * 시트 템플릿
+ */
+export interface SheetTemplate extends BaseEntity {
+    name: string;
+    description: string;
+    category: 'investment' | 'residence' | 'commercial' | 'general';
+    isPublic: boolean;
+    createdBy: string;
+    usageCount: number;
+    template: {
+        columns: UserDefinedColumn[];
+        defaultFilters: SheetFilter[];
+        defaultSorting: SheetSort[];
+        viewSettings: SheetViewSettings;
+    };
+    tags: string[];
+    rating: {
+        average: number;
+        count: number;
     };
 }
 /**
- * 시트 비교 분석
+ * 매물 비교 그룹
  */
-export interface SheetComparison {
-    properties: SheetProperty[];
-    comparisonFields: string[];
-    analysis: {
-        priceComparison: {
-            highest: SheetProperty;
-            lowest: SheetProperty;
-            average: number;
-        };
-        areaComparison: {
-            largest: SheetProperty;
-            smallest: SheetProperty;
-            average: number;
-        };
-        recommendations: string[];
-    };
-}
-/**
- * 알림 설정
- */
-export interface NotificationSettings extends BaseEntity {
+export interface PropertyComparisonGroup extends BaseEntity {
     userId: string;
-    priceChangeAlertEnabled: boolean;
-    priceChangeThreshold?: number;
-    newTransactionAlertEnabled: boolean;
-    customConditionAlertEnabled: boolean;
-    customAlertConditions?: Record<string, any>;
-    webPushToken?: string;
-    appPushToken?: string;
-}
-/**
- * 가격 스냅샷 (알림용)
- */
-export interface PriceSnapshot extends BaseEntity {
-    aptSeq: string;
-    exclusiveUseArea: number;
-    snapshotDate: Date;
-    averageDealAmount?: number;
-    averageJeonseAmount?: number;
-    transactionCount: number;
+    name: string;
+    propertyIds: string[];
+    comparisonMetrics: string[];
+    memo?: string;
 }
 //# sourceMappingURL=sheet.d.ts.map

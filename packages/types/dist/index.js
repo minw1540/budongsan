@@ -1,6 +1,8 @@
 "use strict";
-// 공통 타입 정의 패키지
-// 모든 애플리케이션에서 사용하는 공통 타입들을 정의합니다.
+/**
+ * @smart-real-estate/types
+ * 스마트 부동산 시트 서비스 공통 TypeScript 타입 정의
+ */
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -16,8 +18,14 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-__exportStar(require("./auth"), exports);
-__exportStar(require("./property"), exports);
-__exportStar(require("./sheet"), exports);
+// 공통 타입
 __exportStar(require("./common"), exports);
+// 인증 관련 타입
+__exportStar(require("./auth"), exports);
+// 부동산 관련 타입
+__exportStar(require("./property"), exports);
+// 시트 관련 타입
+__exportStar(require("./sheet"), exports);
+// 알림 관련 타입
+__exportStar(require("./notification"), exports);
 //# sourceMappingURL=index.js.map

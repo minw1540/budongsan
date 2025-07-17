@@ -1,17 +1,29 @@
 /**
+ * 공통 응답 구조 및 기본 타입 정의
+ */
+/**
  * API 응답 기본 구조
  */
-export interface ApiResponse<T = any> {
+export interface ApiResponse<T = unknown> {
     status: 'success' | 'error';
     message: string;
     data?: T;
     code?: string;
-    details?: any;
+    details?: unknown;
 }
 /**
- * 페이지네이션 메타 정보
+ * 에러 응답 구조
  */
-export interface PaginationMeta {
+export interface ErrorResponse {
+    status: 'error';
+    message: string;
+    code: string;
+    details?: unknown;
+}
+/**
+ * 페이지네이션 정보
+ */
+export interface PaginationInfo {
     page: number;
     limit: number;
     total: number;
@@ -20,13 +32,14 @@ export interface PaginationMeta {
     hasPrev: boolean;
 }
 /**
- * 페이지네이션이 포함된 API 응답
+ * 페이지네이션이 포함된 리스트 응답
  */
-export interface PaginatedResponse<T> extends ApiResponse<T[]> {
-    meta: PaginationMeta;
+export interface PaginatedResponse<T> {
+    items: T[];
+    pagination: PaginationInfo;
 }
 /**
- * 기본 Entity 인터페이스
+ * 기본 엔티티 구조
  */
 export interface BaseEntity {
     id: string;
@@ -34,42 +47,32 @@ export interface BaseEntity {
     updatedAt: Date;
 }
 /**
- * 로딩 상태
+ * 좌표 정보
  */
-export type LoadingState = 'idle' | 'pending' | 'succeeded' | 'failed';
+export interface Coordinates {
+    latitude: number;
+    longitude: number;
+}
 /**
- * 에러 정보
+ * 기간 정보
  */
-export interface ErrorInfo {
-    message: string;
-    code?: string;
-    details?: any;
+export interface DateRange {
+    startDate: Date;
+    endDate: Date;
 }
 /**
  * 정렬 옵션
  */
 export interface SortOption {
     field: string;
-    order: 'asc' | 'desc';
+    direction: 'asc' | 'desc';
 }
 /**
- * 필터 옵션 기본 타입
+ * 필터 옵션
  */
-export interface BaseFilter {
-    page?: number;
-    limit?: number;
-    sort?: SortOption;
-}
-/**
- * 단위 변환 타입
- */
-export type AreaUnit = 'sqm' | 'pyeong';
-export type PriceUnit = 'won' | 'million_won';
-/**
- * 좌표 정보
- */
-export interface Coordinates {
-    lat: number;
-    lng: number;
+export interface FilterOption {
+    field: string;
+    operator: 'eq' | 'ne' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'like';
+    value: unknown;
 }
 //# sourceMappingURL=common.d.ts.map

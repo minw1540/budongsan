@@ -30,14 +30,14 @@
   - 빌드 및 실행 통합 테스트
 
 #### Task 1.1.2: 공통 패키지 초기 설정
-- [ ] **Task**: `packages/types`, `packages/common-utils` 패키지 초기 설정
-- [ ] **상세 작업**:
+- [X] **Task**: `packages/types`, `packages/common-utils` 패키지 초기 설정
+- [X] **상세 작업**:
   - `packages/types/` TypeScript 프로젝트 초기화
   - 공통 타입 정의 파일 구조 생성 (`auth.ts`, `property.ts`, `sheet.ts` 등)
   - `packages/common-utils/` 유틸리티 패키지 초기화
   - 단위 변환, 날짜 처리 등 공통 함수 기본 구조 작성
-- [ ] **완료 기준**: 공통 패키지가 생성되고 다른 패키지에서 import 가능함
-- [ ] **테스트 코드 작성**:
+- [X] **완료 기준**: 공통 패키지가 생성되고 다른 패키지에서 import 가능함
+- [X] **테스트 코드 작성**:
   - 타입 정의 검증 테스트 (TypeScript 컴파일 테스트)
   - 공통 유틸리티 함수 단위 테스트
   - 패키지 간 import/export 테스트

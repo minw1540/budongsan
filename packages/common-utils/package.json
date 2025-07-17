@@ -21,8 +21,7 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "date-fns": "^2.30.0",
-    "@smart-real-estate/types": "workspace:*"
+    "date-fns": "^2.30.0"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",

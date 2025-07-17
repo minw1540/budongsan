@@ -1,129 +1,166 @@
-import { BaseEntity, BaseFilter } from './common';
+/**
+ * 부동산 매물/단지 관련 타입 정의
+ */
+import { BaseEntity, Coordinates } from './common';
+/**
+ * 거래 유형
+ */
+export type TransactionType = 'sale' | 'lease' | 'rent';
+/**
+ * 부동산 유형
+ */
+export type PropertyType = 'apartment' | 'villa' | 'house' | 'office' | 'commercial';
 /**
  * 지역 정보
  */
 export interface Region extends BaseEntity {
-    lawdCd: string;
-    sidoNm: string;
-    sggNm: string;
-    umdNm?: string;
-    characteristics?: Record<string, any>;
+    code: string;
+    name: string;
+    level: 'sido' | 'sigungu' | 'dong';
+    parentCode?: string;
+    coordinates?: Coordinates;
 }
 /**
  * 아파트 단지 정보
  */
 export interface Complex extends BaseEntity {
-    aptSeq: string;
-    aptNm: string;
-    lawdCd: string;
-    umdNm: string;
-    jibun?: string;
-    roadNm?: string;
-    buildYear?: number;
-    totalHouseholds?: number;
-    totalParkingSpaces?: number;
-    parkingPerHousehold?: number;
-    floorAreaRatio?: number;
-    buildingToLandRatio?: number;
-    developer?: string;
-    heatingType?: string;
-    managementOfficeContact?: string;
-    keySummary?: string;
-    schoolDistrictInfo?: Record<string, any>;
-    subwayStationInfo?: Record<string, any>;
+    aptSeq: number;
+    name: string;
+    buildYear: number;
+    address: string;
+    roadAddress: string;
+    coordinates: Coordinates;
+    totalHouseholds: number;
+    dongCount: number;
+    parkingCount?: number;
+    region: {
+        sidoCode: string;
+        sidoName: string;
+        sigunguCode: string;
+        sigunguName: string;
+        dongCode: string;
+        dongName: string;
+    };
+    facilities?: {
+        elevator: boolean;
+        parking: boolean;
+        security: boolean;
+        playground: boolean;
+        gym: boolean;
+        sauna: boolean;
+    };
 }
 /**
- * 거래 구분
+ * 아파트 세대 정보
  */
-export type TransactionType = '매매' | '전세' | '월세';
+export interface Unit {
+    dong: string;
+    ho: string;
+    exclusiveUseArea: number;
+    supplyArea?: number;
+    floor: number;
+    direction?: string;
+    roomCount?: number;
+    bathroomCount?: number;
+}
 /**
- * 부동산 거래 내역
+ * 부동산 거래 정보
  */
 export interface PropertyTransaction extends BaseEntity {
-    aptSeq: string;
-    lawdCd: string;
+    aptSeq: number;
+    complexName: string;
+    dong: string;
+    ho?: string;
     exclusiveUseArea: number;
-    dealAmount: number;
-    dealYear: number;
-    dealMonth: number;
-    dealDay: number;
-    contractDate: Date;
-    floor?: number;
-    transactionType?: string;
-    transactionGbn: TransactionType;
-    sggCd?: string;
-    umdCd?: string;
-    umdNm?: string;
-    jibun?: string;
-    buildYear?: number;
-    aptDong?: string;
+    floor: number;
+    transactionType: TransactionType;
+    price: number;
+    deposit?: number;
+    monthlyRent?: number;
+    transactionDate: Date;
+    address: string;
+    buildYear: number;
+    coordinates: Coordinates;
+    region: {
+        sidoCode: string;
+        sidoName: string;
+        sigunguCode: string;
+        sigunguName: string;
+        dongCode: string;
+        dongName: string;
+    };
+    isNewBuilding?: boolean;
+    cancelYN?: 'Y' | 'N';
+    cancelDate?: Date;
+    estateAgentName?: string;
 }
 /**
  * 매물 검색 필터
  */
-export interface PropertySearchFilter extends BaseFilter {
-    lawdCd?: string;
-    aptSeq?: string;
-    transactionGbn?: TransactionType;
-    minArea?: number;
-    maxArea?: number;
-    minPrice?: number;
-    maxPrice?: number;
-    minBuildYear?: number;
-    maxBuildYear?: number;
-    keyword?: string;
-    dateFrom?: Date;
-    dateTo?: Date;
-}
-/**
- * 매물 검색 결과
- */
-export interface PropertySearchResult {
-    complex: Complex;
-    recentTransactions: PropertyTransaction[];
-    avgPrice: number;
-    priceRange: {
-        min: number;
-        max: number;
+export interface PropertySearchFilter {
+    region?: {
+        sidoCode?: string;
+        sigunguCode?: string;
+        dongCode?: string;
     };
-    transactionCount: number;
+    transactionType?: TransactionType[];
+    priceRange?: {
+        min?: number;
+        max?: number;
+    };
+    areaRange?: {
+        min?: number;
+        max?: number;
+    };
+    buildYearRange?: {
+        min?: number;
+        max?: number;
+    };
+    transactionDateRange?: {
+        startDate?: Date;
+        endDate?: Date;
+    };
+    complexName?: string;
+    coordinates?: {
+        center: Coordinates;
+        radius: number;
+    };
 }
 /**
- * 단지 상세 정보
+ * 매물 통계 정보
  */
-export interface ComplexDetail extends Complex {
-    transactions: PropertyTransaction[];
-    priceByArea: Record<string, {
-        avgPrice: number;
-        recentPrice: number;
-        priceChange: number;
-        transactionCount: number;
-    }>;
-    nearbyComplexes: Complex[];
-}
-/**
- * 매물 상세 분석 정보
- */
-export interface PropertyDetailAnalysis {
-    complex: Complex;
+export interface PropertyStatistics {
+    aptSeq: number;
     exclusiveUseArea: number;
-    transactions: PropertyTransaction[];
-    priceAnalysis: {
-        currentAvgPrice: number;
-        prevMonthAvgPrice: number;
-        priceChange: number;
-        priceChangePercent: number;
-        highestPrice: number;
-        lowestPrice: number;
-    };
-    marketTrend: {
-        period: string;
-        priceHistory: Array<{
-            date: Date;
-            avgPrice: number;
+    transactionType: TransactionType;
+    statistics: {
+        totalCount: number;
+        averagePrice: number;
+        medianPrice: number;
+        minPrice: number;
+        maxPrice: number;
+        pricePerArea: number;
+        lastTransactionDate: Date;
+        monthlyTrend: {
+            month: string;
+            averagePrice: number;
             transactionCount: number;
-        }>;
+        }[];
     };
-    recommendationScore: number;
+}
+/**
+ * 매물 즐겨찾기
+ */
+export interface PropertyBookmark extends BaseEntity {
+    userId: string;
+    aptSeq: number;
+    exclusiveUseArea?: number;
+    transactionType?: TransactionType;
+    memo?: string;
+    alertSettings?: {
+        priceAlert: boolean;
+        priceThreshold?: number;
+        newTransactionAlert: boolean;
+    };
 }
 //# sourceMappingURL=property.d.ts.map
