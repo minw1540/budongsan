@@ -17,40 +17,40 @@
 ### 1.1 프로젝트 구조 설정
 
 #### Task 1.1.1: 모노레포 초기 설정
-- [x] **Task**: 루트 디렉토리 생성 및 yarn workspaces 설정
-- [x] **상세 작업**:
+- [ ] **Task**: 루트 디렉토리 생성 및 yarn workspaces 설정
+- [ ] **상세 작업**:
   - `smart-real-estate/` 루트 디렉토리 생성
   - `package.json` 파일에 yarn workspaces 설정
   - `apps/`, `packages/` 디렉토리 구조 생성
   - `.gitignore`, `README.md`, `.env.example` 파일 생성
-- [x] **완료 기준**: 모노레포 구조가 설정되고 yarn workspaces가 정상 동작함
-- [x] **테스트 코드 작성**:
+- [ ] **완료 기준**: 모노레포 구조가 설정되고 yarn workspaces가 정상 동작함
+- [ ] **테스트 코드 작성**:
   - yarn workspaces 정상 동작 검증 스크립트
   - 패키지 간 의존성 설치 테스트
   - 빌드 및 실행 통합 테스트
 
 #### Task 1.1.2: 공통 패키지 초기 설정
-- [x] **Task**: `packages/types`, `packages/common-utils` 패키지 초기 설정
-- [x] **상세 작업**:
+- [ ] **Task**: `packages/types`, `packages/common-utils` 패키지 초기 설정
+- [ ] **상세 작업**:
   - `packages/types/` TypeScript 프로젝트 초기화
   - 공통 타입 정의 파일 구조 생성 (`auth.ts`, `property.ts`, `sheet.ts` 등)
   - `packages/common-utils/` 유틸리티 패키지 초기화
   - 단위 변환, 날짜 처리 등 공통 함수 기본 구조 작성
-- [x] **완료 기준**: 공통 패키지가 생성되고 다른 패키지에서 import 가능함
-- [x] **테스트 코드 작성**:
+- [ ] **완료 기준**: 공통 패키지가 생성되고 다른 패키지에서 import 가능함
+- [ ] **테스트 코드 작성**:
   - 타입 정의 검증 테스트 (TypeScript 컴파일 테스트)
   - 공통 유틸리티 함수 단위 테스트
   - 패키지 간 import/export 테스트
 
 #### Task 1.1.3: 웹 프론트엔드 프로젝트 초기화
-- [x] **Task**: Next.js 웹 애플리케이션 초기 설정
-- [x] **상세 작업**:
+- [ ] **Task**: Next.js 웹 애플리케이션 초기 설정
+- [ ] **상세 작업**:
   - `apps/web/` Next.js 프로젝트 생성 (App Router 사용)
   - TypeScript, Tailwind CSS, ESLint, Prettier 설정
   - 폴더 구조 생성 (`src/app/`, `src/components/`, `src/lib/` 등)
   - 기본 레이아웃 및 공통 컴포넌트 구조 설정
-- [x] **완료 기준**: Next.js 개발 서버가 정상 실행되고 기본 페이지가 표시됨
-- [x] **테스트 코드 작성**:
+- [ ] **완료 기준**: Next.js 개발 서버가 정상 실행되고 기본 페이지가 표시됨
+- [ ] **테스트 코드 작성**:
   - Next.js 페이지 렌더링 테스트
   - 기본 컴포넌트 단위 테스트 (Jest + React Testing Library)
   - ESLint/Prettier 설정 검증 테스트
